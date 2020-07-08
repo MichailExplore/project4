@@ -1,5 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // Function to add new post
-    document.querySelector('')
+    // Function to get posts
+    function get_posts() {
+
+    };
+    // Function to add post
+    console.log('MIO')
 });

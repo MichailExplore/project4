@@ -13,3 +13,6 @@ class Post(models.Model):
     date = models.DateTimeField()
     message = models.TextField()
     likes = models.IntegerField(default=0)
+
+    def __str__(self):
+        return '{}: {}'.format(self.user.username, self.message)
