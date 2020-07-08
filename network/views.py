@@ -29,16 +29,24 @@ def login_view(request):
             login(request, user)
             return HttpResponseRedirect(reverse('index'))
         context = {
-            'message': 'Oops! Invalid credentials.'
+            'message': 'Oops! Invalid credentials for privacyinvader.com.'
         }
         return render(request, 'network/login.html', context)
     return render(request, 'network/login.html')
 
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect(reverse('index'))
+    context = {
+        'message': 'You have successfully logged out of privacyinvader.com.'
+    }
+    return render(request, 'network/index.html', context)
 
 def register(request):
+    if request.user.is_authenticated:
+        context = {
+            'message': 'You cannot register while logged into privacyinvader.com.'
+        }
+        return render(request, 'network/index.html', context)
     if request.method == 'POST':
         username = request.POST['username']
         email = request.POST['email']
@@ -56,18 +64,9 @@ def register(request):
             user.save()
         except IntegrityError:
             context = {
-                'message': 'Oops! That username already exists.'
+                'message': 'Oops! That username already exists on privacyinvader.com.'
             }
             return render(request, 'network/register.html', context)
         login(request, user)
         return HttpResponseRedirect(reverse('index'))
     return render(request, 'network/register.html')
-
-@login_required
-def update_password(request):
-    print('Mio')
-    # user = request.user
-    # user.set_password('admin')
-    # user.save()
-    # login(request, user)
-    return HttpResponseRedirect(reverse('index'))

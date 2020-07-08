@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html lang='en'>
     <head>
-        <title>Social Network</title>
+        <title>privacyinvader.com</title>
         <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css' integrity='sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh' crossorigin='anonymous'>
         <link href='{% static "network/styles.css" %}' rel='stylesheet'>
         <script src='{% static "network/index.js" %}'></script>
@@ -11,12 +11,12 @@
     <body>
 
         <nav class='navbar navbar-expand-lg navbar-light bg-light'>
-            <a style='font-weight: bold;' class='navbar-brand'>Fwitter</a>
+            <a style='font-weight: bold; color: #3b5998;' class='navbar-brand'>privacyinvader.com</a>
             <div>
               <ul class='navbar-nav mr-auto'>
                 {% if user.is_authenticated %}
                     <li class='nav-item'>
-                        <a class='nav-link' href='#'><strong>{{ user.username }}</strong></a>
+                        <a class='nav-link' href='' onclick='return false;'><strong>{{ user.username }}</strong></a>
                     </li>
                 {% endif %}
                 <li class='nav-item'>
@@ -24,7 +24,7 @@
                 </li>
                 {% if user.is_authenticated %}
                     <li class='nav-item'>
-                        <a class='nav-link' href='#'>Following</a>
+                        <a class='nav-link' href='' onclick='return false;'>Following</a>
                     </li>
                     <li class='nav-item'>
                         <a class='nav-link' href='{% url "logout" %}'>Log out</a>
