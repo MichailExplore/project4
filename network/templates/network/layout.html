@@ -11,7 +11,7 @@
     <body>
 
         <nav class='navbar navbar-expand-lg navbar-light bg-light'>
-            <a style='font-weight: bold;' class='navbar-brand'>FakeTwitter</a>
+            <a style='font-weight: bold;' class='navbar-brand'>Fwitter</a>
             <div>
               <ul class='navbar-nav mr-auto'>
                 {% if user.is_authenticated %}
@@ -42,8 +42,10 @@
           </nav>
 
         <div class='body'>
-            {% block body %}
-            {% endblock %}
+            <div class='main'>
+                {% block body %}
+                {% endblock %}
+            </div>
         </div>
     </body>
 </html>

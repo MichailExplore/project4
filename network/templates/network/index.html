@@ -2,11 +2,24 @@
 
 {% block body %}
 
+    <h2>All posts</h2>
+
     {% if message %}
         <div class='alert alert-dark' role='alert'>{{ message }}</div>
     {% endif %}
 
-    <div class='container'>
-        <h2>All posts</h2>
-    </div>
+    {% if user.is_authenticated %}
+        <div class='border rounded' style='margin:15px; padding: 15px;'>
+            <form>
+                {% csrf_token %}
+
+                <h4>Create post</h4>
+                <div class='form-group'>
+                    <textarea placeholder='Write post here...' class='form-control'></textarea>
+                </div>
+                <input class='btn btn-primary' type='submit' value='Post'>
+
+            </form>
+        </div>
+    {% endif %}
 {% endblock %}
