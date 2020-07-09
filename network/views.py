@@ -1,11 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
+from .models import User, Post
 
 
 def index(request):
@@ -70,3 +70,9 @@ def register(request):
         login(request, user)
         return HttpResponseRedirect(reverse('index'))
     return render(request, 'network/register.html')
+
+def get_posts(request):
+    posts = Post.objects.all().values('message', 'user__username', 'date',
+                                      'time', 'likes')
+    posts = list(posts)
+    return JsonResponse(posts, safe=False)

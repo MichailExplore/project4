@@ -10,7 +10,8 @@ class User(AbstractUser):
 class Post(models.Model):
     """A model that keeps track of posts."""
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    date = models.DateTimeField()
+    date = models.DateField()
+    time = models.TimeField()
     message = models.TextField()
     likes = models.IntegerField(default=0)
 

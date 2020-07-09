@@ -1,9 +1,27 @@
 document.addEventListener("DOMContentLoaded", () => {
-
-    // Function to get posts
-    function get_posts() {
-
-    };
-    // Function to add post
-    console.log('MIO')
+    get_posts();
 });
+
+// Function to fetch existing posts
+function get_posts() {
+    const request = new XMLHttpRequest();
+    request.open('GET', '/api/get-posts');
+    request.onload = () => {
+        if (request.status !== 200)
+            console.log('Could not load posts')
+        const data = JSON.parse(request.responseText);
+        data.forEach(content => {
+            add_post(content);
+        });
+    };
+    request.send();
+};
+// Function to add post
+function add_post(content) {
+    const post_template = Handlebars.compile(document.querySelector('#post-template').innerHTML);
+    const post = post_template({'username': content['user__username'],
+                                'message': content['message'],
+                                'date': content['date'],
+                                'time': content['time']});
+    document.querySelector('#posts').innerHTML += post;
+};
