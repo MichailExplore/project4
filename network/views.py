@@ -1,11 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
+from .models import User, Post
 
 
 def index(request):
@@ -21,28 +21,37 @@ def login_view(request):
         }
         return render(request, 'network/index.html', context)
     if request.method == 'POST':
-        username = request.POST['username']
+        email = request.POST['email']
         password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, username=email, password=password)
 
         if user is not None:
             login(request, user)
             return HttpResponseRedirect(reverse('index'))
         context = {
-            'message': 'Oops! Invalid credentials.'
+            'message': 'Oops! Invalid credentials for privacyinvader.com.'
         }
         return render(request, 'network/login.html', context)
     return render(request, 'network/login.html')
 
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect(reverse('index'))
+    context = {
+        'message': 'You have successfully logged out of privacyinvader.com.'
+    }
+    return render(request, 'network/index.html', context)
 
 def register(request):
+    if request.user.is_authenticated:
+        context = {
+            'message': 'You cannot register while logged into privacyinvader.com.'
+        }
+        return render(request, 'network/index.html', context)
     if request.method == 'POST':
-        username = request.POST['username']
         email = request.POST['email']
         password = request.POST['password']
+        first_name = request.POST['first-name']
+        last_name = request.POST['last-name']
 
         if password != request.POST['confirmation']:
             context = {
@@ -52,22 +61,22 @@ def register(request):
 
         try:
             # helper function used when creating User object (hashing related)
-            user = User.objects.create_user(username, email, password)
+            user = User.objects.create_user(username=email, password=password,
+                                            first_name=first_name,
+                                            last_name=last_name)
             user.save()
         except IntegrityError:
             context = {
-                'message': 'Oops! That username already exists.'
+                'message': 'Oops! That email already exists on privacyinvader.com.'
             }
             return render(request, 'network/register.html', context)
         login(request, user)
         return HttpResponseRedirect(reverse('index'))
     return render(request, 'network/register.html')
 
-@login_required
-def update_password(request):
-    print('Mio')
-    # user = request.user
-    # user.set_password('admin')
-    # user.save()
-    # login(request, user)
-    return HttpResponseRedirect(reverse('index'))
+def get_posts(request):
+    posts = Post.objects.all().values('message', 'date', 'time', 'likes',
+                                      'user__avatar', 'user__first_name',
+                                      'user__last_name')
+    posts = list(posts)
+    return JsonResponse(posts, safe=False)

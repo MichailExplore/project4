@@ -2,7 +2,23 @@
 
 {% block body %}
 
-    <h2>All posts</h2>
+    <!-- Template for post component -->
+    {% verbatim %}
+    <script id='post-template' type='text/x-handlebars-template'>
+        <div class='border rounded' style='margin:15px; padding: 15px; word-wrap: break-word'>
+            <div class='media'>
+                <img src='{{ avatar }}' width='50' height='50' class='rounded-circle'>
+                <div class="media-body ml-3">
+                    <h6><a href='' onclick='return false;' style='color: black;'>{{ first_name }} {{ last_name }}</a></h6>
+                    <p class='small text-muted'>
+                        {{ date }} | {{ time }}
+                    </p>
+                </div>
+                </div>
+            <p>{{ message }}</p>
+        </div>
+    </script>
+    {% endverbatim %}
 
     {% if message %}
         <div class='alert alert-dark' role='alert'>{{ message }}</div>
@@ -22,4 +38,6 @@
             </form>
         </div>
     {% endif %}
+    <div id='posts'>
+    </div>
 {% endblock %}
