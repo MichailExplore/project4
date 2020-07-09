@@ -19,9 +19,12 @@ function get_posts() {
 // Function to add post
 function add_post(content) {
     const post_template = Handlebars.compile(document.querySelector('#post-template').innerHTML);
-    const post = post_template({'username': content['user__username'],
+    const post = post_template({'first_name': content['user__first_name'],
+                                'last_name': content['user__last_name'],
                                 'message': content['message'],
                                 'date': content['date'],
-                                'time': content['time']});
+                                'time': content['time'],
+                                'avatar': content['user__avatar']});
+    console.log(content['user__first_name']);
     document.querySelector('#posts').innerHTML += post;
 };
