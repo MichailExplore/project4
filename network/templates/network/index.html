@@ -1,4 +1,9 @@
 {% extends 'network/layout.html' %}
+{% load static %}
+
+{% block scripts %}
+    <script src='{% static "network/index.js" %}'></script>
+{% endblock %}
 
 {% block body %}
 
@@ -16,12 +21,13 @@
                 </div>
                 </div>
             <p>{{ message }}</p>
+            <span style="font-size:100%;color:red;">&hearts;</span> {{ likes }}
         </div>
     </script>
     {% endverbatim %}
 
     {% if message %}
-        <div class='alert alert-dark' role='alert'>{{ message }}</div>
+        <div class='alert alert-dark' style='margin: 5px;' role='alert'>{{ message }}</div>
     {% endif %}
 
     {% if user.is_authenticated %}
@@ -31,10 +37,9 @@
 
                 <h4>Create post</h4>
                 <div class='form-group'>
-                    <textarea placeholder='Write post here...' class='form-control'></textarea>
+                    <textarea id='post-input' placeholder='What is on your mind?' class='form-control'></textarea>
                 </div>
-                <input class='btn btn-primary' type='submit' value='Post'>
-
+                <input class='btn btn-primary' type='submit' value='Post' id='post-button'>
             </form>
         </div>
     {% endif %}

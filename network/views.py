@@ -9,6 +9,8 @@ from .models import User, Post
 
 
 def index(request):
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse('login'))
     context = {
         'user': request.user
     }
@@ -36,10 +38,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    context = {
-        'message': 'You have successfully logged out of privacyinvader.com.'
-    }
-    return render(request, 'network/index.html', context)
+    return HttpResponseRedirect(reverse('login'))
 
 def register(request):
     if request.user.is_authenticated:
@@ -80,3 +79,17 @@ def get_posts(request):
                                       'user__last_name')
     posts = list(posts)
     return JsonResponse(posts, safe=False)
+
+@login_required
+def create_post(request):
+    try:
+        message = request.POST['post-input']
+    except Exception:
+        context = {
+            'message': 'Oops! Could not post.'
+        }
+        return render('network/index.html', context)
+    user = request.user
+    post = Post(user=user, message=message)
+    post.save()
+    return JsonResponse(list(post), safe=False)
