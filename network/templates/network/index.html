@@ -19,13 +19,13 @@
                         {{ date }} | {{ time }}
                     </p>
                 </div>
-                </div>
+            </div>
             <p>{{ message }}</p>
-            <input class='btn btn-primary' type='submit' value='&hearts; Like' id='like-button'>
-            <input class='btn btn-primary float-right' type='submit' value='Comment' id='comment-button'>
-            <div>
-                <span style="font-size:100%;color:red;">&hearts;</span>{{ likes }}
-                <a href='' style='text-align: right;'>0 comments</a>
+            <hr>
+            <div style='width:100%;' class='btn-group' role='group' aria-label='Basic example'>
+                <button type='button' class='btn btn-success'><i class='fa fa-thumbs-up' aria-hidden='true'></i> {{ likes }}</button>
+                <button type='button' class='btn btn-danger'><i class='fa fa-thumbs-down' aria-hidden='true'></i> {{ dislikes }}</button>
+                <button type='button' class='btn btn-secondary'><i class='fa fa-comment' aria-hidden='true'></i> {{ likes }}</button>
             </div>
         </div>
     </script>

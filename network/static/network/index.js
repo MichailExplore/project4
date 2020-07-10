@@ -28,6 +28,7 @@ function add_post(content) {
                                 'date': content['date'],
                                 'time': content['time'],
                                 'likes': content['likes'],
+                                'dislikes': content['dislikes'],
                                 'avatar': content['user__avatar']});
     document.querySelector('#posts').innerHTML += post;
 };

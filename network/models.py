@@ -20,6 +20,7 @@ class Post(models.Model):
     date = models.DateField(default=timezone.now)
     time = models.TimeField(default=timezone.now)
     likes = models.IntegerField(default=0)
+    dislikes = models.IntegerField(default=0)
     message = models.TextField()
 
     def __str__(self):

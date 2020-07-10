@@ -75,8 +75,8 @@ def register(request):
 
 def get_posts(request):
     posts = Post.objects.all().values('message', 'date', 'time', 'likes',
-                                      'user__avatar', 'user__first_name',
-                                      'user__last_name')
+                                      'dislikes', 'user__avatar',
+                                      'user__first_name', 'user__last_name')
     posts = list(posts)
     return JsonResponse(posts, safe=False)
 

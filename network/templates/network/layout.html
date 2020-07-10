@@ -18,15 +18,15 @@
               <ul class='navbar-nav mr-auto'>
                 {% if user.is_authenticated %}
                     <div class='btn-group' role='group' aria-label='Basic example'>
-                        <button type='button' class='btn btn-light'><i class='fa fa-user' aria-hidden='true'>&nbsp</i><a href='' style='color: black;'><strong>{{ user.first_name }}</strong></a></button>
-                        <button type='button' class='btn btn-light'><i class='fa fa-comments' aria-hidden='true'>&nbsp</i><a href='{% url "index" %}' style='color: black;'>All posts</a></button>
-                        <button type='button' class='btn btn-light'><i class='fa fa-child' aria-hidden='true'>&nbsp</i><a href='' style='color: black;'>Following</a></button>
-                        <button type='button' class='btn btn-light'><i class='fa fa-lock' aria-hidden='true'>&nbsp</i><a href='{% url "logout" %}' style='color: black;'>Log out</a></button>
+                        <a href='{% url "index" %}'><button type='button' class='btn btn-light'><i class='fa fa-comments' aria-hidden='true'>&nbsp</i>All posts</button></a>
+                        <a href=''><button type='button' class='btn btn-light'><i class='fa fa-child' aria-hidden='true'>&nbsp</i>Following</button></a>
+                        <a href=''><button type='button' class='btn btn-light'><i class='fa fa-user' aria-hidden='true'>&nbsp</i><strong>{{ user.first_name }}</strong></button></a>
+                        <a href='{% url "logout" %}'><button type='button' class='btn btn-light'><i class='fa fa-lock' aria-hidden='true'>&nbsp</i>Log out</button></a>
                     </div>
                 {% else %}
                     <div class='btn-group' role='group' aria-label='Basic example'>
-                        <button type='button' class='btn btn-light'><i class='fa fa-unlock' aria-hidden='true'>&nbsp</i><a href='{% url "login" %}' style='color: black;'>Log in</a></button>
-                        <button type='button' class='btn btn-light'><i class='fa fa-arrow-right' aria-hidden='true'>&nbsp</i><a href='{% url "register" %}' style='color: black;'>Register</a></button>
+                        <a href='{% url "login" %}'><button type='button' class='btn btn-light'><i class='fa fa-unlock' aria-hidden='true'>&nbsp</i>Log in</button></a>
+                        <a href='{% url "register" %}'><button type='button' class='btn btn-light'><i class='fa fa-arrow-right' aria-hidden='true'>&nbsp</i>Register</button></a>
                     </div>
                 {% endif %}
               </ul>
@@ -39,5 +39,9 @@
                 {% endblock %}
             </div>
         </div>
+        <div style='margin: 15px; padding: 15px;'>
+            <div class='navbar navbar-expand-lg navbar-light bg-light justify-content-center fixed-bottom' style='background: None;'>© 2020 Copyright: privacyinvader.com</div>
+        </div>
+
     </body>
 </html>
