@@ -21,7 +21,12 @@
                 </div>
                 </div>
             <p>{{ message }}</p>
-            <span style="font-size:100%;color:red;">&hearts;</span> {{ likes }}
+            <input class='btn btn-primary' type='submit' value='&hearts; Like' id='like-button'>
+            <input class='btn btn-primary float-right' type='submit' value='Comment' id='comment-button'>
+            <div>
+                <span style="font-size:100%;color:red;">&hearts;</span>{{ likes }}
+                <a href='' style='text-align: right;'>0 comments</a>
+            </div>
         </div>
     </script>
     {% endverbatim %}
@@ -30,19 +35,18 @@
         <div class='alert alert-dark' style='margin: 5px;' role='alert'>{{ message }}</div>
     {% endif %}
 
-    {% if user.is_authenticated %}
-        <div class='border rounded' style='margin:15px; padding: 15px;'>
-            <form>
-                {% csrf_token %}
+    <div class='border rounded' style='margin:15px; padding: 15px;'>
+        <form>
+            {% csrf_token %}
 
-                <h4>Create post</h4>
-                <div class='form-group'>
-                    <textarea id='post-input' placeholder='What is on your mind?' class='form-control'></textarea>
-                </div>
-                <input class='btn btn-primary' type='submit' value='Post' id='post-button'>
-            </form>
-        </div>
-    {% endif %}
+            <h4>Create post</h4>
+            <div class='form-group'>
+                <textarea id='post-input' placeholder='What is on your mind?' class='form-control'></textarea>
+            </div>
+            <input class='btn btn-primary' type='submit' value='Post' id='post-button'>
+        </form>
+    </div>
+
     <div id='posts'>
     </div>
 {% endblock %}

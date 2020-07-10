@@ -5,7 +5,8 @@
     <head>
         <title>privacyinvader.com</title>
         <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css' integrity='sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh' crossorigin='anonymous'>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js'></script>
+        <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
         <link href='{% static "network/styles.css" %}' rel='stylesheet'>
         {% block scripts %}{% endblock %}
         <link rel="shortcut icon" href="{%  static 'network/favicon.ico' %}">
@@ -16,25 +17,17 @@
             <div>
               <ul class='navbar-nav mr-auto'>
                 {% if user.is_authenticated %}
-                    <li class='nav-item'>
-                        <a class='nav-link' href='' onclick='return false;'><strong>{{ user.first_name }}</strong></a>
-                    </li>
-                    <li class='nav-item'>
-                      <a class='nav-link' href='{% url "index" %}'>All posts</a>
-                    </li>
-                    <li class='nav-item'>
-                        <a class='nav-link' href='' onclick='return false;'>Following</a>
-                    </li>
-                    <li class='nav-item'>
-                        <a class='nav-link' href='{% url "logout" %}'>Log out</a>
-                    </li>
+                    <div class='btn-group' role='group' aria-label='Basic example'>
+                        <button type='button' class='btn btn-light'><i class='fa fa-user' aria-hidden='true'>&nbsp</i><a href='' style='color: black;'><strong>{{ user.first_name }}</strong></a></button>
+                        <button type='button' class='btn btn-light'><i class='fa fa-comments' aria-hidden='true'>&nbsp</i><a href='{% url "index" %}' style='color: black;'>All posts</a></button>
+                        <button type='button' class='btn btn-light'><i class='fa fa-child' aria-hidden='true'>&nbsp</i><a href='' style='color: black;'>Following</a></button>
+                        <button type='button' class='btn btn-light'><i class='fa fa-lock' aria-hidden='true'>&nbsp</i><a href='{% url "logout" %}' style='color: black;'>Log out</a></button>
+                    </div>
                 {% else %}
-                    <li class='nav-item'>
-                        <a class='nav-link' href='{% url "login" %}'>Log in</a>
-                    </li>
-                    <li class='nav-item'>
-                        <a class='nav-link' href='{% url "register" %}'>Register</a>
-                    </li>
+                    <div class='btn-group' role='group' aria-label='Basic example'>
+                        <button type='button' class='btn btn-light'><i class='fa fa-unlock' aria-hidden='true'>&nbsp</i><a href='{% url "login" %}' style='color: black;'>Log in</a></button>
+                        <button type='button' class='btn btn-light'><i class='fa fa-arrow-right' aria-hidden='true'>&nbsp</i><a href='{% url "register" %}' style='color: black;'>Register</a></button>
+                    </div>
                 {% endif %}
               </ul>
             </div>
