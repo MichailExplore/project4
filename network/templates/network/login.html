@@ -24,10 +24,10 @@
                 <label>Password</label>
                 <input class='form-control' type='password' id='password-input' name='password' placeholder='Password'>
             </div>
-            <input id='log-in-button' class='btn btn-primary' type='submit' value='Log in'>
+            <input id='log-in-button' class='btn btn-secondary' type='submit' value='Log in'>
         </div>
     </form>
 
-    Don't have an account? <a style='color: #3b5998;' href='{% url "register" %}'>Register.</a>
+    Don't have an account? <a href='{% url "register" %}' style='color:black;'><i class='fa fa-arrow-right' aria-hidden='true'>&nbsp</i>Register</a>
 
 {% endblock %}

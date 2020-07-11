@@ -73,10 +73,11 @@ def register(request):
         return HttpResponseRedirect(reverse('index'))
     return render(request, 'network/register.html')
 
+@login_required
 def get_posts(request):
     posts = Post.objects.all().values('message', 'date', 'time', 'likes',
                                       'dislikes', 'user__avatar', 'user',
-                                      'user__first_name', 'user__last_name')
+                                      'user__first_name', 'user__last_name').order_by('-date', '-time')
     for post in posts:
         post['own_post'] = False
         if post['user'] == request.user.id:
