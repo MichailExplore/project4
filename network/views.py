@@ -75,8 +75,12 @@ def register(request):
 
 def get_posts(request):
     posts = Post.objects.all().values('message', 'date', 'time', 'likes',
-                                      'dislikes', 'user__avatar',
+                                      'dislikes', 'user__avatar', 'user',
                                       'user__first_name', 'user__last_name')
+    for post in posts:
+        post['own_post'] = False
+        if post['user'] == request.user.id:
+            post['own_post'] = True
     posts = list(posts)
     return JsonResponse(posts, safe=False)
 

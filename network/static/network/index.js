@@ -28,10 +28,16 @@ function add_post(content) {
                                 'date': content['date'],
                                 'time': content['time'],
                                 'likes': content['likes'],
+                                'own_post': content['own_post'],
                                 'dislikes': content['dislikes'],
                                 'avatar': content['user__avatar']});
     document.querySelector('#posts').innerHTML += post;
 };
+
+Handlebars.registerHelper('if_eq', function(a, b, opts) {
+    if (a == b)
+        return opts.fn(this);
+});
 
 // Function to create post in DB
 // function create_post(message) {

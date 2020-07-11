@@ -14,7 +14,12 @@
             <div class='media'>
                 <img src='{{ avatar }}' width='50' height='50' class='rounded-circle'>
                 <div class="media-body ml-3">
-                    <h6><a href='' onclick='return false;' style='color: black;'>{{ first_name }} {{ last_name }}</a></h6>
+                    <div>
+                        <a href='' onclick='return false;' style='color: black; font-size:15px; font-weight: bold;'>{{ first_name }} {{ last_name }}</a>
+                            {{#if own_post}}
+                                <button class='btn btn-light btn-sm float-right'><i class='fa fa-edit' aria-hidden='true'></i></button>
+                            {{/if}}
+                    </div>
                     <p class='small text-muted'>
                         {{ date }} | {{ time }}
                     </p>
@@ -23,9 +28,9 @@
             <p>{{ message }}</p>
             <hr>
             <div style='width:100%;' class='btn-group' role='group' aria-label='Basic example'>
-                <button type='button' class='btn btn-success'><i class='fa fa-thumbs-up' aria-hidden='true'></i> {{ likes }}</button>
-                <button type='button' class='btn btn-danger'><i class='fa fa-thumbs-down' aria-hidden='true'></i> {{ dislikes }}</button>
-                <button type='button' class='btn btn-secondary'><i class='fa fa-comment' aria-hidden='true'></i> {{ likes }}</button>
+                <button type='button' class='btn btn-sm btn-success'><i class='fa fa-thumbs-up' style='color:green;' aria-hidden='true'></i> {{ likes }}</button>
+                <button type='button' class='btn btn-sm btn-danger'><i class='fa fa-thumbs-down' style='color:red' aria-hidden='true'></i> {{ dislikes }}</button>
+                <button type='button' class='btn btn-sm btn-secondary'><i class='fa fa-comment' aria-hidden='true'></i> {{ likes }}</button>
             </div>
         </div>
     </script>
