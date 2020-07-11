@@ -1,8 +1,7 @@
-.main {
-    margin-left: 10px;
-    margin-right: 10px;
-}
-
 textarea {
     width: 100%;
+}
+
+.container{
+        max-width: 600px;
 }

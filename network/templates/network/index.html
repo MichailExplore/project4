@@ -1,4 +1,9 @@
 {% extends 'network/layout.html' %}
+{% load static %}
+
+{% block scripts %}
+    <script src='{% static "network/index.js" %}'></script>
+{% endblock %}
 
 {% block body %}
 
@@ -9,35 +14,44 @@
             <div class='media'>
                 <img src='{{ avatar }}' width='50' height='50' class='rounded-circle'>
                 <div class="media-body ml-3">
-                    <h6><a href='' onclick='return false;' style='color: black;'>{{ first_name }} {{ last_name }}</a></h6>
+                    <div>
+                        <a href='' onclick='return false;' style='color: black; font-size:15px; font-weight: bold;'>{{ first_name }} {{ last_name }}</a>
+                            {{#if own_post}}
+                                <button class='btn btn-light btn-sm float-right'><i class='fa fa-edit' aria-hidden='true'></i></button>
+                            {{/if}}
+                    </div>
                     <p class='small text-muted'>
                         {{ date }} | {{ time }}
                     </p>
                 </div>
-                </div>
+            </div>
             <p>{{ message }}</p>
+            <hr>
+            <div style='width:100%;' class='btn-group' role='group' aria-label='Basic example'>
+                <button type='button' class='btn btn-sm btn-success'><i class='fa fa-thumbs-up' style='color:green;' aria-hidden='true'></i> {{ likes }}</button>
+                <button type='button' class='btn btn-sm btn-danger'><i class='fa fa-thumbs-down' style='color:red' aria-hidden='true'></i> {{ dislikes }}</button>
+                <button type='button' class='btn btn-sm btn-secondary'><i class='fa fa-comment' aria-hidden='true'></i> {{ likes }}</button>
+            </div>
         </div>
     </script>
     {% endverbatim %}
 
     {% if message %}
-        <div class='alert alert-dark' role='alert'>{{ message }}</div>
+        <div class='alert alert-dark' style='margin: 5px;' role='alert'>{{ message }}</div>
     {% endif %}
 
-    {% if user.is_authenticated %}
-        <div class='border rounded' style='margin:15px; padding: 15px;'>
-            <form>
-                {% csrf_token %}
+    <div class='border rounded' style='margin:15px; padding: 15px;'>
+        <form>
+            {% csrf_token %}
 
-                <h4>Create post</h4>
-                <div class='form-group'>
-                    <textarea placeholder='Write post here...' class='form-control'></textarea>
-                </div>
-                <input class='btn btn-primary' type='submit' value='Post'>
+            <h4>Create post</h4>
+            <div class='form-group'>
+                <textarea id='post-input' placeholder='What is on your mind?' class='form-control'></textarea>
+            </div>
+            <input class='btn btn-primary' type='submit' value='Post' id='post-button'>
+        </form>
+    </div>
 
-            </form>
-        </div>
-    {% endif %}
     <div id='posts'>
     </div>
 {% endblock %}
