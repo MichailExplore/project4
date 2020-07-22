@@ -9,31 +9,32 @@
 
     <!-- Template for post component -->
     {% verbatim %}
-    <script id='post-template' type='text/x-handlebars-template'>
-        <div class='border rounded' style='margin:15px; padding: 15px; word-wrap: break-word'>
-            <div class='media'>
-                <img src='{{ avatar }}' width='50' height='50' class='rounded-circle'>
-                <div class="media-body ml-3">
-                    <div>
-                        <a href='' onclick='return false;' style='color: black; font-size:15px; font-weight: bold;'>{{ first_name }} {{ last_name }}</a>
-                            {{#if own_post}}
-                                <button class='btn btn-light btn-sm float-right'><i class='fa fa-edit' aria-hidden='true'></i></button>
-                            {{/if}}
-                    </div>
-                    <p class='small text-muted'>
-                        {{ date }} | {{ time }}
-                    </p>
-                </div>
-            </div>
-            <p>{{ message }}</p>
+        <script id='buttons-template' type='text/x-handlebars-template'>
+            {{#if have_liked}}
+                <button type='button' class='btn btn-sm btn-success like-button'><i class='fa fa-thumbs-up emoji' style='color:green;' aria-hidden='true'></i> {{ likes }}</button>
+            {{else}}
+                <button type='button' class='btn btn-sm btn-success like-button'><i class='fa fa-thumbs-up emoji' style='color:white;' aria-hidden='true'></i> {{ likes }}</button>
+            {{/if}}
+            {{#if have_disliked}}
+                <button type='button' class='btn btn-sm btn-danger dislike-button'><i class='fa fa-thumbs-down emoji' style='color:red' aria-hidden='true'></i> {{ dislikes }}</button>
+            {{else}}
+                <button type='button' class='btn btn-sm btn-danger dislike-button'><i class='fa fa-thumbs-down emoji' style='color:white' aria-hidden='true'></i> {{ dislikes }}</button>
+            {{/if}}
+            <button type='button' class='btn btn-sm btn-secondary'><i class='fa fa-comment emoji' aria-hidden='true'></i> 0</button>
+        </script>
+    {% endverbatim %}
+
+    <!-- Template for comment to post component -->
+    {% verbatim %}
+        <script id='comment-template' type='text/x-handlebars-template'>
             <hr>
-            <div style='width:100%;' class='btn-group' role='group' aria-label='Basic example'>
-                <button type='button' class='btn btn-sm btn-success'><i class='fa fa-thumbs-up' style='color:green;' aria-hidden='true'></i> {{ likes }}</button>
-                <button type='button' class='btn btn-sm btn-danger'><i class='fa fa-thumbs-down' style='color:red' aria-hidden='true'></i> {{ dislikes }}</button>
-                <button type='button' class='btn btn-sm btn-secondary'><i class='fa fa-comment' aria-hidden='true'></i> {{ likes }}</button>
-            </div>
-        </div>
-    </script>
+            <form>
+                <div class='form-group'>
+                    <textarea id='post-input' placeholder='Leave your comment here' class='form-control' spellcheck='true'></textarea>
+                </div>
+                <input class='btn btn-secondary' type='submit' value='Comment'>
+            </form>
+        </script>
     {% endverbatim %}
 
     {% if message %}
@@ -41,17 +42,46 @@
     {% endif %}
 
     <div class='border rounded' style='margin:15px; padding: 15px;'>
-        <form>
+        <form action='{% url "create-post" %}' method='post'>
             {% csrf_token %}
-
             <h4>Create post</h4>
             <div class='form-group'>
-                <textarea id='post-input' placeholder='What is on your mind?' class='form-control'></textarea>
+                <textarea id='post-input' name='message' placeholder='What is on your mind?' class='form-control' spellcheck='true'></textarea>
             </div>
-            <input class='btn btn-primary' type='submit' value='Post' id='post-button'>
+            <input class='btn btn-secondary' type='submit' value='Post' id='post-button'>
         </form>
     </div>
-
-    <div id='posts'>
-    </div>
+    {% for post in posts %}
+        <div class='border rounded' style='margin:15px; padding: 15px; word-wrap: break-word'>
+            <div class='media'>
+                <img src='{{ post.user__avatar }}' width='50' height='50' class='rounded-circle'>
+                <div class="media-body ml-3">
+                    <div>
+                        <a href='' onclick='return false;' style='color: black; font-size:15px; font-weight: bold;'>{{ post.user__first_name }} {{ post.user__last_name }}</a>
+                            {% if post.own_post %}
+                                <button class='btn btn-light btn-sm float-right'><i class='fa fa-edit' aria-hidden='true'></i></button>
+                            {% endif %}
+                    </div>
+                    <p class='small text-muted'>
+                        {{ post.date|date:"Y-m-d" }} | {{ post.time }}
+                    </p>
+                </div>
+            </div>
+            <p>{{ post.message }}</p>
+            <hr>
+            <div style='width:100%;' id='{{ post.id }}' class='btn-group' role='group' aria-label='Basic example'>
+                {% if post.have_liked %}
+                    <button type='button' class='btn btn-sm btn-success like-button'><i class='fa fa-thumbs-up emoji' style='color:green;' aria-hidden='true'></i> {{ post.likes }}</button>
+                {% else %}
+                    <button type='button' class='btn btn-sm btn-success like-button'><i class='fa fa-thumbs-up emoji' style='color:white;' aria-hidden='true'></i> {{ post.likes }}</button>
+                {% endif %}
+                {% if post.have_disliked %}
+                    <button type='button' class='btn btn-sm btn-danger dislike-button'><i class='fa fa-thumbs-down emoji' style='color:red' aria-hidden='true'></i> {{ post.dislikes }}</button>
+                {% else %}
+                    <button type='button' class='btn btn-sm btn-danger dislike-button'><i class='fa fa-thumbs-down emoji' style='color:white' aria-hidden='true'></i> {{ post.dislikes }}</button>
+                {% endif %}
+                <button type='button' class='btn btn-sm btn-secondary'><i class='fa fa-comment emoji' aria-hidden='true'></i> 0</button>
+            </div>
+        </div>
+    {% endfor %}
 {% endblock %}

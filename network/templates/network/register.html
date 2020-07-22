@@ -36,10 +36,10 @@
                 <label>Confirm password</label>
                 <input class='form-control' type='password' id='confirmation-input' name='confirmation' placeholder='Confirm password'>
             </div>
-            <input class='btn btn-primary' id='register-button' type='submit' value='Register'>
+            <input class='btn btn-secondary' id='register-button' type='submit' value='Register'>
         </div>
     </form>
 
-    Already have an account? <a style='color: #3b5998;' href='{% url "login" %}'>Log in.</a>
+    Already have an account? <a href='{% url "login" %}' style='color:black;'><i class='fa fa-unlock' aria-hidden='true'>&nbsp</i>Log in</a>
 
 {% endblock %}

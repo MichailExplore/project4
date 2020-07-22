@@ -11,20 +11,18 @@ class User(AbstractUser):
     # TODO: replace link with something from environment.
 
     def __str__(self):
-        return '{} (id: {})'.format(self.first_name, self.id)
+        return '{} {}'.format(self.first_name, self.last_name)
 
 class Post(models.Model):
     """A model that keeps track of posts."""
     user = models.ForeignKey(User, on_delete=models.CASCADE,
                              related_name='posts')
-    date = models.DateField(default=timezone.now)
-    time = models.TimeField(default=timezone.now)
-    likes = models.IntegerField(default=0)
-    dislikes = models.IntegerField(default=0)
+    date = models.DateField(auto_now_add=True)
+    time = models.TimeField(auto_now_add=True)
     message = models.TextField()
 
     def __str__(self):
-        return '{}: {}'.format(self.user.first_name, self.message)
+        return '{} ({})'.format(self.message, self.user.first_name)
 
 class Comment(models.Model):
     """A model for comments."""
@@ -36,6 +34,22 @@ class Comment(models.Model):
     message = models.TextField()
 
     def __str__(self):
-        return 'Comment by {} on post of {}: {}'.format(self.user.first_name,
-                                                        self.post.user.first_name,
-                                                        self.message)
+        str_ = 'Comment by {} on post of {}: {}'
+        str_ = str_.format(self.user.first_name, self.post.user.first_name,
+                           self.message)
+        return str_
+
+class Emotion(models.Model):
+    """A model for likes and dislikes."""
+
+    class Sentiment(models.IntegerChoices):
+        Like = 1
+        Dislike = 2
+
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    sentiment = models.IntegerField(choices=Sentiment.choices)
+
+    def __str__(self):
+        return '{} had emotional response to post: "{}"'.format(self.user,
+                                                                self.post)

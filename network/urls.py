@@ -8,6 +8,6 @@ urlpatterns = [
     path('login', views.login_view, name='login'),
     path('logout', views.logout_view, name='logout'),
     path('register', views.register, name='register'),
-    path('api/get-posts', views.get_posts),
-    path('api/create-post', views.create_post)
+    path('api/create-post', views.create_post, name='create-post'),
+    path('api/adjust-emotion/<int:sentiment>/<int:post_id>', views.adjust_emotion)
 ]

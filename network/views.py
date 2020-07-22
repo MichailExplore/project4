@@ -1,25 +1,29 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 
-from .models import User, Post
+from .models import Post, User, Emotion
+from .tools import PostProcessor
 
 
 def index(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('login'))
     context = {
-        'user': request.user
+        'user': request.user,
+        'posts': PostProcessor.process(request, 'all')
     }
     return render(request, 'network/index.html', context)
 
 def login_view(request):
     if request.user.is_authenticated:
         context = {
-            'message': 'You are alread logged in.'
+            'message': 'You are already logged in.'
         }
         return render(request, 'network/index.html', context)
     if request.method == 'POST':
@@ -36,6 +40,7 @@ def login_view(request):
         return render(request, 'network/login.html', context)
     return render(request, 'network/login.html')
 
+@login_required
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse('login'))
@@ -73,27 +78,23 @@ def register(request):
         return HttpResponseRedirect(reverse('index'))
     return render(request, 'network/register.html')
 
-def get_posts(request):
-    posts = Post.objects.all().values('message', 'date', 'time', 'likes',
-                                      'dislikes', 'user__avatar', 'user',
-                                      'user__first_name', 'user__last_name')
-    for post in posts:
-        post['own_post'] = False
-        if post['user'] == request.user.id:
-            post['own_post'] = True
-    posts = list(posts)
-    return JsonResponse(posts, safe=False)
-
 @login_required
 def create_post(request):
+    message = request.POST['message']
+    Post.objects.create(user=request.user, message=message)
+    return HttpResponseRedirect(reverse('index'))
+
+@login_required
+def adjust_emotion(request, sentiment, post_id):
     try:
-        message = request.POST['post-input']
-    except Exception:
-        context = {
-            'message': 'Oops! Could not post.'
-        }
-        return render('network/index.html', context)
-    user = request.user
-    post = Post(user=user, message=message)
-    post.save()
-    return JsonResponse(list(post), safe=False)
+        post = Post.objects.get(pk=post_id)
+    except Post.DoesNotExist:
+        return Http404('Trying to amend emotion of post which does not exist.')
+    emotions = Emotion.objects.all().filter(sentiment=sentiment, post=post_id).values('user')
+    l = [entry['user'] for entry in list(emotions)]
+    post = Post.objects.get(pk=post_id)
+    if request.user.id not in l:
+        Emotion.objects.create(user=request.user, sentiment=sentiment, post=post)
+    else:
+        Emotion.objects.filter(user=request.user, sentiment=sentiment, post=post).delete()
+    return JsonResponse(list(PostProcessor.process(request, post_id)), safe=False)
