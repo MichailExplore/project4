@@ -10,3 +10,29 @@ textarea {
         border-color: black;
         box-shadow: 0 0 0 0.2rem rgba(23, 34, 59, 0.25);
 }
+
+@keyframes hide {
+    0% {
+        opacity: 1;
+        height: 100%;
+    }
+    75% {
+        opacity: 0;
+        height: 100%;
+    }
+    100% {
+        opacity: 0;
+        height: 0%;
+    }
+}
+
+.post {
+    animation-name: hide;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+    animation-play-state: paused;
+}
+
+.messages-paragraph {
+    white-space: pre-wrap;
+}
