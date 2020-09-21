@@ -2,47 +2,53 @@
 
 <!DOCTYPE html>
 <html lang='en'>
-    <head>
-        <title>BIGBROTHER</title>
-        <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css' integrity='sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh' crossorigin='anonymous'>
-        <script src='https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js'></script>
-        <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
-        <link href='{% static "network/styles.css" %}' rel='stylesheet'>
-        {% block scripts %}{% endblock %}
-        <link rel='shortcut icon' href='{%  static "network/favicon.ico" %}'>
-    </head>
-    <body>
-        <nav class='navbar navbar-expand-lg navbar-light bg-light justify-content-center'>
-            <img src='{% static "network/bigbrother.png" %}' width='30px'>
-            <div>
-              <ul class='navbar-nav mr-auto'>
-                {% if user.is_authenticated %}
-                    <div class='btn-group' role='group' aria-label='Basic example'>
-                        <a href='{% url "index" %}'><button type='button' class='btn btn-light'><i class='fa fa-comments' aria-hidden='true'>&nbsp</i>All posts</button></a>
-                        <a href=''><button type='button' class='btn btn-light'><i class='fa fa-child' aria-hidden='true'>&nbsp</i>Following</button></a>
-                        <a href=''><button type='button' class='btn btn-light'><i class='fa fa-user' aria-hidden='true'>&nbsp</i><strong>{{ user.first_name }}</strong></button></a>
-                        <a href='{% url "logout" %}'><button type='button' class='btn btn-light'><i class='fa fa-lock' aria-hidden='true'>&nbsp</i>Log out</button></a>
-                    </div>
-                {% else %}
-                    <div class='btn-group' role='group' aria-label='Basic example'>
-                        <a href='{% url "login" %}'><button type='button' class='btn btn-light'><i class='fa fa-unlock' aria-hidden='true'>&nbsp</i>Log in</button></a>
-                        <a href='{% url "register" %}'><button type='button' class='btn btn-light'><i class='fa fa-arrow-right' aria-hidden='true'>&nbsp</i>Register</button></a>
-                    </div>
-                {% endif %}
-              </ul>
-            </div>
-            <img src='{% static "network/bigbrother.png" %}' width='30px'>
-          </nav>
+  <head>
+    <title>BIGBROTHER</title>
+    <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css' integrity='sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh' crossorigin='anonymous'>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js'></script>
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
+    <link href='{% static "network/styles.css" %}' rel='stylesheet'>
+    {% block scripts %}{% endblock %}
+    <link rel='shortcut icon' href='{%  static "network/images/favicon.ico" %}'>
+  </head>
 
-        <div class='body'>
-            <div class='container'>
-                {% block body %}
-                {% endblock %}
-            </div>
-        </div>
-        <div style='margin: 5px; padding: 15px;'>
-            <div class='navbar navbar-expand-lg navbar-light bg-light justify-content-center fixed-bottom' style='background: None;'>© 2020 Copyright: BIGBROTHER Inc.</div>
-        </div>
+  <!-- Template for submit-button loading spinner -->
+  <script id='submit-ls-but-template' type='text/x-handlebars-template'>
+    <span class='spinner-border spinner-border-sm' role='status' aria-hidden='true'></span>
+  </script>
 
-    </body>
+  <body>
+    <nav class='navbar navbar-expand-lg navbar-light bg-light justify-content-center'>
+      <img src='{% static "network/images/bigbrother.png" %}' width='30px'>
+      <div>
+        <ul class='navbar-nav mr-auto'>
+          {% if user.is_authenticated %}
+            <div class='btn-group' role='group' aria-label='Basic example'>
+              <a href='{% url "index" %}'><button type='button' class='btn btn-light'><i class='fa fa-comments' aria-hidden='true'>&nbsp</i>All posts</button></a>
+              <a href=''><button type='button' class='btn btn-light'><i class='fa fa-child' aria-hidden='true'>&nbsp</i>Following</button></a>
+              <a href=''><button type='button' class='btn btn-light'><i class='fa fa-user' aria-hidden='true'>&nbsp</i><strong>{{ user.first_name }}</strong></button></a>
+              <a href='{% url "logout" %}'><button type='button' class='btn btn-light'><i class='fa fa-lock' aria-hidden='true'>&nbsp</i>Log out</button></a>
+            </div>
+          {% else %}
+            <div class='btn-group' role='group' aria-label='Basic example'>
+              <a href='{% url "login" %}'><button type='button' class='btn btn-light'><i class='fa fa-unlock' aria-hidden='true'>&nbsp</i>Log in</button></a>
+              <a href='{% url "register" %}'><button type='button' class='btn btn-light'><i class='fa fa-arrow-right' aria-hidden='true'>&nbsp</i>Register</button></a>
+            </div>
+          {% endif %}
+        </ul>
+      </div>
+      <img src='{% static "network/images/bigbrother.png" %}' width='30px'>
+    </nav>
+
+    <div class='body'>
+      <div class='container'>
+        {% block body %}
+        {% endblock %}
+      </div>
+    </div>
+    <div style='margin: 5px; padding: 15px;'>
+      <div class='navbar navbar-expand-lg navbar-light bg-light justify-content-center fixed-bottom' style='background: None;'>© 2020 Copyright: BIGBROTHER Inc.</div>
+    </div>
+
+  </body>
 </html>
