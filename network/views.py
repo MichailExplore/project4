@@ -14,8 +14,7 @@ def index(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('login'))
     context = {
-        'user': request.user#,
-        #'posts': PostProcessor.process(request, 'all')
+        'user': request.user
     }
     return render(request, 'network/index.html', context)
 
