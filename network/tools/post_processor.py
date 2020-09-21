@@ -16,8 +16,8 @@ class PostProcessor:
     ]
 
     _ORDER_BY = [
-        '-date',
-        '-time'
+        'date',
+        'time'
     ]
 
     @classmethod

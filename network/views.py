@@ -5,7 +5,6 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
-from django.views.decorators.csrf import csrf_exempt
 
 from .models import Post, User, Emotion
 from .tools import PostProcessor
@@ -15,8 +14,8 @@ def index(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse('login'))
     context = {
-        'user': request.user,
-        'posts': PostProcessor.process(request, 'all')
+        'user': request.user#,
+        #'posts': PostProcessor.process(request, 'all')
     }
     return render(request, 'network/index.html', context)
 
@@ -82,7 +81,7 @@ def register(request):
 def create_post(request):
     message = request.POST['message']
     Post.objects.create(user=request.user, message=message)
-    return HttpResponseRedirect(reverse('index'))
+    return HttpResponse('OK')
 
 @login_required
 def adjust_emotion(request, sentiment, post_id):
@@ -97,4 +96,35 @@ def adjust_emotion(request, sentiment, post_id):
         Emotion.objects.create(user=request.user, sentiment=sentiment, post=post)
     else:
         Emotion.objects.filter(user=request.user, sentiment=sentiment, post=post).delete()
+    return JsonResponse(list(PostProcessor.process(request, post_id)), safe=False)
+
+@login_required
+def get_posts(request, filter_by):
+    posts = PostProcessor.process(request, filter_by)
+    return JsonResponse(list(posts), safe=False)
+
+@login_required
+def get_post(request, post_id):
+    post = Post.objects.get(pk=post_id)
+    return JsonResponse(list(PostProcessor.process(request, post_id)), safe=False)
+
+@login_required
+def delete_post(request, post_id):
+    try:
+        post = Post.objects.get(pk=post_id)
+    except Post.DoesNotExist:
+        return HttpResponseRedirect(reverse('index'))
+    if post.user_id != request.user.id:
+        return HttpResponseRedirect(reverse('index'))
+    post.delete()
+    return HttpResponse('OK')
+
+@login_required
+def update_post(request, post_id):
+    message = request.POST['message']
+    post = Post.objects.get(pk=post_id)
+    if post.user_id != request.user.id:
+        return HttpResponseRedirect(reverse('index'))
+    post.message = message
+    post.save()
     return JsonResponse(list(PostProcessor.process(request, post_id)), safe=False)

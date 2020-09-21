@@ -2,32 +2,33 @@
 {% load static %}
 
 {% block scripts %}
-    <script src='{% static "network/login.js" %}'></script>
+    <script src='{% static "network/submit.js" %}'></script>
 {% endblock %}
 
 {% block body %}
 
-    <h2 style='margin-left: 10px;'>Log in</h2>
+  <h2 style='margin-left: 10px;'>Log in</h2>
 
-    {% if message %}
-        <div class='alert alert-dark' role='alert'>{{ message }}</div>
-    {% endif %}
+  {% if message %}
+    <div class='alert alert-dark' role='alert'>{{ message }}</div>
+  {% endif %}
 
-    <form action='{% url "login" %}' method='post'>
-        {% csrf_token %}
-        <div class='border rounded' style='margin:15px; padding: 15px;'>
-            <div class='form-group'>
-                <label>Email</label>
-                <input autofocus class='form-control' type='text' id='email-input' name='email' placeholder='Email'>
-            </div>
-            <div class='form-group'>
-                <label>Password</label>
-                <input class='form-control' type='password' id='password-input' name='password' placeholder='Password'>
-            </div>
-            <input id='log-in-button' class='btn btn-secondary' type='submit' value='Log in'>
-        </div>
-    </form>
+  <form action='{% url "login" %}' method='post'>
+    {% csrf_token %}
+    <div class='border rounded' style='margin:15px; padding: 15px;'>
+      <div class='form-group'>
+        <label>Email</label>
+        <input autofocus class='form-control input' type='text' name='email' placeholder='Email'>
+      </div>
+      <div class='form-group'>
+        <label>Password</label>
+        <input class='form-control input' type='password' name='password' placeholder='Password'>
+      </div>
+      <button id='submit-button' class='btn btn-secondary' onclick='this.blur()'>Log in</button>
+      <!-- <input id='submit-button' class='btn btn-secondary' type='submit' value='Log in'> -->
+    </div>
+  </form>
 
-    Don't have an account? <a href='{% url "register" %}' style='color:black;'><i class='fa fa-arrow-right' aria-hidden='true'>&nbsp</i>Register</a>
+  Don't have an account? <a href='{% url "register" %}' style='color:black;'><i class='fa fa-arrow-right' aria-hidden='true'>&nbsp</i>Register</a>
 
 {% endblock %}
