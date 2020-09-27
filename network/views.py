@@ -1,13 +1,10 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.http import JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, Http404, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
-
-from .models import Post, User, Emotion
-from .tools import PostProcessor
+from .models import User
 
 
 def index(request):
@@ -20,12 +17,9 @@ def index(request):
 
 def login_view(request):
     if request.user.is_authenticated:
-        context = {
-            'message': 'You are already logged in.'
-        }
-        return render(request, 'network/index.html', context)
+        return render(request, 'network/index.html')
     if request.method == 'POST':
-        email = request.POST['email']
+        email = request.POST['email'].lower()
         password = request.POST['password']
         user = authenticate(request, username=email, password=password)
 
@@ -38,7 +32,6 @@ def login_view(request):
         return render(request, 'network/login.html', context)
     return render(request, 'network/login.html')
 
-@login_required
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse('login'))
@@ -50,7 +43,7 @@ def register(request):
         }
         return render(request, 'network/index.html', context)
     if request.method == 'POST':
-        email = request.POST['email']
+        email = request.POST['email'].lower()
         password = request.POST['password']
         first_name = request.POST['first-name']
         last_name = request.POST['last-name']
@@ -62,10 +55,9 @@ def register(request):
             return render(request, 'network/register.html', context)
 
         try:
-            # helper function used when creating User object (hashing related)
-            user = User.objects.create_user(username=email, password=password,
-                                            first_name=first_name,
-                                            last_name=last_name)
+            # helper function (password hashing related)
+            user = User.objects.create_user(username=email, password=password, email=email,
+                                            first_name=first_name, last_name=last_name)
             user.save()
         except IntegrityError:
             context = {
@@ -75,55 +67,3 @@ def register(request):
         login(request, user)
         return HttpResponseRedirect(reverse('index'))
     return render(request, 'network/register.html')
-
-@login_required
-def create_post(request):
-    message = request.POST['message']
-    Post.objects.create(user=request.user, message=message)
-    return HttpResponse('OK')
-
-@login_required
-def adjust_emotion(request, sentiment, post_id):
-    try:
-        post = Post.objects.get(pk=post_id)
-    except Post.DoesNotExist:
-        return Http404('Trying to amend emotion of post which does not exist.')
-    emotions = Emotion.objects.all().filter(sentiment=sentiment, post=post_id).values('user')
-    l = [entry['user'] for entry in list(emotions)]
-    post = Post.objects.get(pk=post_id)
-    if request.user.id not in l:
-        Emotion.objects.create(user=request.user, sentiment=sentiment, post=post)
-    else:
-        Emotion.objects.filter(user=request.user, sentiment=sentiment, post=post).delete()
-    return JsonResponse(list(PostProcessor.process(request, post_id)), safe=False)
-
-@login_required
-def get_posts(request, filter_by):
-    posts = PostProcessor.process(request, filter_by)
-    return JsonResponse(list(posts), safe=False)
-
-@login_required
-def get_post(request, post_id):
-    post = Post.objects.get(pk=post_id)
-    return JsonResponse(list(PostProcessor.process(request, post_id)), safe=False)
-
-@login_required
-def delete_post(request, post_id):
-    try:
-        post = Post.objects.get(pk=post_id)
-    except Post.DoesNotExist:
-        return HttpResponseRedirect(reverse('index'))
-    if post.user_id != request.user.id:
-        return HttpResponseRedirect(reverse('index'))
-    post.delete()
-    return HttpResponse('OK')
-
-@login_required
-def update_post(request, post_id):
-    message = request.POST['message']
-    post = Post.objects.get(pk=post_id)
-    if post.user_id != request.user.id:
-        return HttpResponseRedirect(reverse('index'))
-    post.message = message
-    post.save()
-    return JsonResponse(list(PostProcessor.process(request, post_id)), safe=False)
