@@ -1,7 +1,7 @@
 import environ
 
 # If using in your own project, update the project namespace below
-from gettingstarted.settings.local import *
+from project4.settings.local import *
 
 env = environ.Env(
     # set casting, default value
