@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from network.models import Like, Post, User
@@ -13,7 +14,7 @@ def create_post(request):
 @login_required
 def get_posts(request):
     posts = Post.objects.all()
-    posts = posts.order_by(*['date', 'time'])
+    posts = posts.order_by(*['-date', '-time'])
     posts = posts.values(*['pk', 'user', 'user__first_name', 'user__last_name', 'user__avatar',
                            'message', 'date', 'time'])
 
@@ -35,7 +36,15 @@ def get_posts(request):
             if user['user_id'] == request.user.id:
                 post['have_liked'] = True
 
-    return JsonResponse(list(posts), safe=False)
+    posts = list(posts)
+
+    p = Paginator(posts, 5)
+    # page = request.GET.get('page')
+    posts_ = p.page(1)
+    posts_ = list(posts_)
+    posts_ = sorted(posts_, key = lambda i: (i['date'], i['time']))
+
+    return JsonResponse(posts_, safe=False)
 
 @login_required
 def get_post(request, post_pk):
