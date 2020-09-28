@@ -11,7 +11,7 @@ class User(AbstractUser):
     avatar = models.CharField(max_length=100, default=_AVATAR_URL)
 
     def __str__(self):
-        return '{} {}'.format(self.first_name, self.last_name)
+        return '{} {} ({})'.format(self.first_name, self.last_name, self.email)
 
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')

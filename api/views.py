@@ -40,7 +40,7 @@ def get_posts(request):
 
     p = Paginator(posts, 5)
     # page = request.GET.get('page')
-    posts_ = p.page(4)
+    posts_ = p.page(1)
     posts_ = list(posts_)
     posts_ = sorted(posts_, key = lambda i: (i['date'], i['time']))
 
