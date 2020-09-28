@@ -150,6 +150,7 @@ function add_posts() {
     document.querySelector('#posts').innerHTML = '';
 
     const data = JSON.parse(request.responseText);
+    console.log(data);
     data.forEach(add_post);
   };
   request.send();
